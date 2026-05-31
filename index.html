@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMV — Source Model Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══ TOPBAR ═══════════════════════════════════════════════════════════ -->
+  <header id="topbar">
+    <div id="brand">SMV</div>
+
+    <div id="topbar-divider"></div>
+
+    <!-- View mode tabs — underline style -->
+    <div id="view-tabs" role="group" aria-label="View mode">
+      <button class="vtab active" id="btn-solid"   data-mode="solid">SOLID</button>
+      <button class="vtab"        id="btn-wire"    data-mode="wire">WIRE</button>
+      <button class="vtab"        id="btn-normals" data-mode="normals">NORMALS</button>
+    </div>
+
+    <div id="topbar-spacer"></div>
+
+    <!-- Utility buttons -->
+    <div id="util-buttons">
+      <button class="ubtn active" id="btn-tex"  title="Toggle textures  T">TEX</button>
+      <button class="ubtn" id="btn-grid"  title="Toggle grid  G">GRID</button>
+      <button class="ubtn" id="btn-bg"    title="Cycle background  B">BG</button>
+      <button class="ubtn" id="btn-reset" title="Reset camera  F">RESET</button>
+    </div>
+
+    <button id="btn-open" title="Open files">OPEN FILE…</button>
+  </header>
+
+  <!-- ═══ BODY ══════════════════════════════════════════════════════════════ -->
+  <div id="body">
+
+    <!-- ── SIDEBAR ──────────────────────────────────────────────────────── -->
+    <aside id="sidebar">
+
+      <div class="panel-block" id="block-files">
+        <div class="block-label collapsible" data-target="files-body">FILES <span class="collapse-arrow">▾</span></div>
+        <div class="block-body" id="files-body">
+        <div id="file-list">
+          <div class="frow frow-none" id="row-mdl">
+            <span class="fname">no file loaded</span><span class="fdot">—</span>
+          </div>
+          <div class="frow hidden" id="row-vvd">
+            <span class="fname">.vvd</span><span class="fdot">○</span>
+          </div>
+          <div class="frow hidden" id="row-vtx">
+            <span class="fname">.vtx</span><span class="fdot">○</span>
+          </div>
+          <div class="frow hidden" id="row-vtf">
+            <span class="fname">textures</span><span class="fdot">○</span>
+          </div>
+        </div>
+        <div id="source-hint" class="block-notice hidden">
+          Source requires .mdl + .vvd + .vtx —<br>drop all three together.
+        </div>
+        </div><!-- /files-body -->
+      </div>
+
+      <div class="panel-block" id="block-info">
+        <div class="block-label collapsible" data-target="info-body">MODEL <span class="collapse-arrow">▾</span></div>
+        <div class="block-body" id="info-body">
+        <div class="props">
+          <div class="prop"><span class="pk">name</span>      <span class="pv mono" id="i-name">—</span></div>
+          <div class="prop"><span class="pk">engine</span>    <span class="pv mono" id="i-engine">—</span></div>
+          <div class="prop"><span class="pk">version</span>   <span class="pv mono" id="i-version">—</span></div>
+          <div class="prop"><span class="pk">bodyparts</span> <span class="pv mono" id="i-parts">—</span></div>
+          <div class="prop"><span class="pk">materials</span> <span class="pv mono" id="i-mats">—</span></div>
+          <div class="prop prop-accent"><span class="pk">vertices</span>  <span class="pv mono" id="i-verts">—</span></div>
+          <div class="prop prop-accent"><span class="pk">triangles</span> <span class="pv mono" id="i-tris">—</span></div>
+        </div>
+        </div><!-- /info-body -->
+      </div>
+
+      <div class="panel-block hidden" id="block-tex">
+        <div class="block-label-row">
+          <span class="block-label collapsible" data-target="tex-body">TEXTURES <span class="collapse-arrow">▾</span></span>
+          <span id="tex-count" class="tex-count-missing"></span>
+          <button id="btn-add-tex" class="block-action" title="Add .vtf files — or drop them on the viewport">add…</button>
+        </div>
+        <div class="block-body" id="tex-body">
+          <div id="texture-list"></div>
+        </div>
+      </div>
+
+      <div class="panel-block" id="block-keys">
+        <div class="block-label collapsible" data-target="keys-body">CONTROLS <span class="collapse-arrow">▾</span></div>
+        <div class="block-body" id="keys-body">
+        <div class="keys">
+          <div class="krow"><span class="kkey">LMB drag</span><span class="kval">orbit</span></div>
+          <div class="krow"><span class="kkey">RMB drag</span><span class="kval">pan</span></div>
+          <div class="krow"><span class="kkey">scroll</span>  <span class="kval">zoom</span></div>
+          <div class="krow"><span class="kkey">F</span>       <span class="kval">reset camera</span></div>
+          <div class="krow"><span class="kkey">T</span>       <span class="kval">toggle textures</span></div>
+          <div class="krow"><span class="kkey">G</span>       <span class="kval">toggle grid</span></div>
+          <div class="krow"><span class="kkey">B</span>       <span class="kval">background</span></div>
+          <div class="krow"><span class="kkey">1 / 2 / 3</span><span class="kval">shade mode</span></div>
+        </div>
+        </div><!-- /keys-body -->
+      </div>
+
+    </aside>
+
+    <!-- ── SIDEBAR RESIZE HANDLE ──────────────────────────────────────── -->
+    <div id="sidebar-handle" title="Drag to resize"></div>
+
+    <!-- ── VIEWPORT ─────────────────────────────────────────────────────── -->
+    <div id="viewport">
+
+      <!-- empty state -->
+      <div id="dropzone">
+        <div id="dz-inner">
+          <p id="dz-main">DROP .MDL</p>
+          <p id="dz-sub">GoldSrc v10 &nbsp;·&nbsp; Source v44–49 (+ .vvd .vtx)</p>
+          <button id="btn-browse">or browse files…</button>
+        </div>
+      </div>
+
+      <!-- canvas -->
+      <canvas id="canvas"></canvas>
+
+      <!-- HUD overlays (visible when model is loaded) -->
+      <div id="hud" class="hidden">
+        <div id="hud-tl">
+          <div id="hud-name"></div>
+          <div id="hud-engine-tag"></div>
+        </div>
+        <div id="hud-br">
+          <span id="hud-verts"></span>
+          <span id="hud-tris"></span>
+        </div>
+      </div>
+
+      <!-- drag-over flash -->
+      <div id="drag-flash"></div>
+
+      <!-- loading -->
+      <div id="load-veil">
+        <div id="load-line"><div id="load-fill"></div></div>
+        <div id="load-text">parsing…</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ STATUSBAR ════════════════════════════════════════════════════════ -->
+  <footer id="statusbar">
+    <span id="st-left">ready — drop a .mdl file to begin</span>
+    <span id="st-right"></span>
+  </footer>
+
+  <!-- toasts -->
+  <div id="toasts"></div>
+
+  <input type="file" id="file-input" multiple
+    accept=".mdl,.vvd,.vtx,.vtf,.dx90.vtx,.dx80.vtx" style="display:none" />
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
