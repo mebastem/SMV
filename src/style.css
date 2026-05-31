@@ -400,6 +400,14 @@ button { font-family: inherit; font-weight: 600; cursor: pointer; }
 /* ── viewport ──────────────────────────────────────────────────────────────── */
 #viewport {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* stage holds canvas + overlays; fills viewport minus the tab strip */
+#stage {
+  flex: 1;
   position: relative;
   overflow: hidden;
 }
@@ -410,6 +418,104 @@ button { font-family: inherit; font-weight: 600; cursor: pointer; }
   height: 100%;
   outline: none;
 }
+
+/* ── tab bar ───────────────────────────────────────────────────────────────── */
+#tabbar {
+  display: flex;
+  align-items: stretch;
+  height: 32px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--edge);
+  flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  user-select: none;
+}
+#tabbar::-webkit-scrollbar { height: 0; }
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px 0 11px;
+  min-width: 120px;
+  max-width: 200px;
+  background: var(--panel);
+  border-right: 1px solid var(--edge);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  transition: background .1s;
+}
+.tab:hover { background: var(--panel2); }
+
+/* active tab: lifts to bg color + orange top rule */
+.tab-active {
+  background: var(--bg);
+}
+.tab-active::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+}
+
+.tab-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--text-faint);
+}
+.tab-goldsrc .tab-dot { background: #c89040; }
+.tab-source  .tab-dot { background: #4a80c0; }
+.tab-source2 .tab-dot { background: #a07ee8; }
+
+.tab-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--f-ui);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+.tab-active .tab-name { color: var(--text); }
+
+.tab-close {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 15px;
+  line-height: 1;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .1s, color .1s;
+}
+.tab-close:hover { background: var(--edge2); color: var(--text); }
+
+.tab-new {
+  flex-shrink: 0;
+  width: 32px;
+  border: none;
+  border-right: 1px solid var(--edge);
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: color .1s, background .1s;
+}
+.tab-new:hover { color: var(--accent); background: var(--panel2); }
 
 /* ── drop zone (empty state) ───────────────────────────────────────────────── */
 #dropzone {

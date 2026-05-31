@@ -157,3 +157,45 @@ export function setGridButton(v) {
 export function setTexButton(v) {
   document.getElementById('btn-tex').classList.toggle('active', v)
 }
+
+// ── Tab bar ───────────────────────────────────────────────────────────────────
+const tabbar = document.getElementById('tabbar')
+
+export function renderTabs(tabs, activeId, { onSelect, onClose, onNew }) {
+  tabbar.innerHTML = ''
+  if (!tabs.length) { tabbar.classList.add('hidden'); return }
+  tabbar.classList.remove('hidden')
+
+  for (const tab of tabs) {
+    const el = document.createElement('div')
+    el.className = `tab${tab.id === activeId ? ' tab-active' : ''} tab-${tab.engine}`
+    el.title = tab.info.name
+
+    const dot = document.createElement('span')
+    dot.className = 'tab-dot'
+
+    const name = document.createElement('span')
+    name.className = 'tab-name'
+    name.textContent = tab.info.name || 'model'
+
+    const close = document.createElement('button')
+    close.className = 'tab-close'
+    close.textContent = '×'
+    close.title = 'Close tab'
+    close.addEventListener('click', e => { e.stopPropagation(); onClose(tab.id) })
+
+    el.appendChild(dot)
+    el.appendChild(name)
+    el.appendChild(close)
+    el.addEventListener('click', () => onSelect(tab.id))
+    el.addEventListener('mousedown', e => { if (e.button === 1) { e.preventDefault(); onClose(tab.id) } })
+    tabbar.appendChild(el)
+  }
+
+  const newBtn = document.createElement('button')
+  newBtn.className = 'tab-new'
+  newBtn.textContent = '+'
+  newBtn.title = 'Open another model'
+  newBtn.addEventListener('click', onNew)
+  tabbar.appendChild(newBtn)
+}

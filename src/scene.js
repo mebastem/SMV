@@ -81,14 +81,44 @@ export function clearModel() {
   if (wireOverlay){ scene.remove(wireOverlay); wireOverlay = null }
 }
 
+// Mount a specific group as the active model (used by tab switching)
+export function mountGroup(group) {
+  if (modelGroup && modelGroup !== group) scene.remove(modelGroup)
+  modelGroup = group
+  scene.add(group)
+}
+
+// Remove a specific group from the scene without clearing modelGroup
+export function unmountGroup(group) {
+  scene.remove(group)
+  if (modelGroup === group) modelGroup = null
+}
+
 export function addModel(group) {
   clearModel()
   modelGroup = group
   scene.add(group)
   fitCamera()
-
-  // Re-apply current mode to new model
   applyMode(currentMode)
+}
+
+// Free all GPU resources owned by a group (called when a tab is closed)
+export function disposeGroup(group) {
+  scene.remove(group)
+  if (modelGroup === group) modelGroup = null
+  const seenTex = new Set()
+  group.traverse(obj => {
+    if (!(obj instanceof THREE.Mesh)) return
+    obj.geometry?.dispose()
+    const mats = Array.isArray(obj.material) ? obj.material : [obj.material]
+    for (const m of mats) {
+      if (!m) continue
+      for (const t of [m.map, m.userData?.originalMap]) {
+        if (t && !seenTex.has(t)) { t.dispose(); seenTex.add(t) }
+      }
+      m.dispose()
+    }
+  })
 }
 
 export function fitCamera() {

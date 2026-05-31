@@ -115,39 +115,46 @@
     <!-- ── VIEWPORT ─────────────────────────────────────────────────────── -->
     <div id="viewport">
 
-      <!-- empty state -->
-      <div id="dropzone">
-        <div id="dz-inner">
-          <p id="dz-main">DROP .MDL</p>
-          <p id="dz-sub">GoldSrc v10 &nbsp;·&nbsp; Source v44–49 (+ .vvd .vtx)</p>
-          <button id="btn-browse">or browse files…</button>
+      <!-- tab strip (hidden until at least one model is open) -->
+      <div id="tabbar" class="hidden"></div>
+
+      <!-- stage holds the canvas + all viewport overlays -->
+      <div id="stage">
+
+        <!-- empty state -->
+        <div id="dropzone">
+          <div id="dz-inner">
+            <p id="dz-main">DROP .MDL</p>
+            <p id="dz-sub">GoldSrc v10 &nbsp;·&nbsp; Source v44–49 (+ .vvd .vtx)</p>
+            <button id="btn-browse">or browse files…</button>
+          </div>
         </div>
-      </div>
 
-      <!-- canvas -->
-      <canvas id="canvas"></canvas>
+        <!-- canvas -->
+        <canvas id="canvas"></canvas>
 
-      <!-- HUD overlays (visible when model is loaded) -->
-      <div id="hud" class="hidden">
-        <div id="hud-tl">
-          <div id="hud-name"></div>
-          <div id="hud-engine-tag"></div>
+        <!-- HUD overlays (visible when model is loaded) -->
+        <div id="hud" class="hidden">
+          <div id="hud-tl">
+            <div id="hud-name"></div>
+            <div id="hud-engine-tag"></div>
+          </div>
+          <div id="hud-br">
+            <span id="hud-verts"></span>
+            <span id="hud-tris"></span>
+          </div>
         </div>
-        <div id="hud-br">
-          <span id="hud-verts"></span>
-          <span id="hud-tris"></span>
+
+        <!-- drag-over flash -->
+        <div id="drag-flash"></div>
+
+        <!-- loading -->
+        <div id="load-veil">
+          <div id="load-line"><div id="load-fill"></div></div>
+          <div id="load-text">parsing…</div>
         </div>
+
       </div>
-
-      <!-- drag-over flash -->
-      <div id="drag-flash"></div>
-
-      <!-- loading -->
-      <div id="load-veil">
-        <div id="load-line"><div id="load-fill"></div></div>
-        <div id="load-text">parsing…</div>
-      </div>
-
     </div>
   </div>
 
