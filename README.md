@@ -6,11 +6,7 @@
 
 ## What we're building
 
-Every tool that exists today for previewing Source engine models is either platform-locked (Windows-only executables), outdated, or requires a full game installation to load textures. You need HLMV for GoldSrc, a different HLMV build for Source, and something else entirely for anything modern. None of them run in a browser. None of them are shareable.
-
-SMV is a single web page that handles all of it. The goal is one tool — cross-platform, zero-install, open in a tab — that can preview `.mdl` files from any era of the Valve engine lineage. Drop your files, see your model, move on.
-
-The secondary goal is getting the implementation right. MDL, VVD, VTX, and VTF are underdocumented binary formats with version-specific quirks and structs that have never been cleanly described outside of the Source SDK headers. This project aims to be an accurate, readable reference implementation of those parsers in JavaScript.
+I realized that, to view a model file related with GoldSrc or different Source versions, you have to have corresponding model viewer application. I decided to why not create my own viewer. Claude may have overwritten things on the README and information may seem too robotic (which even I dont even understand some of them at all) but wanted to write this section myself. This tool aims to support all engine versions/branches at one place.
 
 ---
 
